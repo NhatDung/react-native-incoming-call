@@ -36,6 +36,7 @@ public class UnlockScreenActivity extends AppCompatActivity implements UnlockScr
     private ImageView ivAvatar;
     private String uuid = "";
     static boolean active = false;
+    private ReadableMap data;
     private static Vibrator v = (Vibrator) IncomingCallModule.reactContext.getSystemService(Context.VIBRATOR_SERVICE);
     private long[] pattern = {0, 1000, 800};
     private static MediaPlayer player = MediaPlayer.create(IncomingCallModule.reactContext, Settings.System.DEFAULT_RINGTONE_URI);
@@ -70,6 +71,7 @@ public class UnlockScreenActivity extends AppCompatActivity implements UnlockScr
             if (bundle.containsKey("uuid")) {
                 uuid = bundle.getString("uuid");
             }
+            data = Arguments.fromBundle(bundle);
             if (bundle.containsKey("name")) {
                 String name = bundle.getString("name");
                 tvName.setText(name);
@@ -136,6 +138,7 @@ public class UnlockScreenActivity extends AppCompatActivity implements UnlockScr
         WritableMap params = Arguments.createMap();
         params.putBoolean("accept", true);
         params.putString("uuid", uuid);
+        params.putString("data", data);
         if (!IncomingCallModule.reactContext.hasCurrentActivity()) {
             params.putBoolean("isHeadless", true);
         }

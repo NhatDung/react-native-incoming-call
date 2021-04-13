@@ -8,6 +8,7 @@ import android.content.Context;
 import android.util.Log;
 import java.util.Timer;
 import java.util.TimerTask;
+import com.facebook.react.bridge.Arguments;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -16,6 +17,8 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
+import com.facebook.react.bridge.ReadableMap;
+import javax.annotation.Nullable;
 
 public class IncomingCallModule extends ReactContextBaseJavaModule {
 
@@ -37,7 +40,7 @@ public class IncomingCallModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void display(String uuid, String name, String avatar, String info, int timeout) {
+    public void display(String uuid, String name, String avatar, String info, int timeout, @Nullable ReadableMap data) {
         if (UnlockScreenActivity.active) {
             return;
         }
@@ -47,6 +50,10 @@ public class IncomingCallModule extends ReactContextBaseJavaModule {
             bundle.putString("name", name);
             bundle.putString("avatar", avatar);
             bundle.putString("info", info);
+
+            if (data != null) {
+                bundle = Arguments.toBundle(data);
+            }
             Intent i = new Intent(reactContext, UnlockScreenActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             i.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED +
@@ -99,7 +106,7 @@ public class IncomingCallModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void openAppFromHeadlessMode(String uuid) {
+    public void openAppFromHeadlessMode(String uuid, @Nullable ReadableMap data) {
         Context context = getAppContext();
         String packageName = context.getApplicationContext().getPackageName();
         Intent focusIntent = context.getPackageManager().getLaunchIntentForPackage(packageName).cloneFilter();
@@ -114,8 +121,10 @@ public class IncomingCallModule extends ReactContextBaseJavaModule {
                     WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
             final WritableMap response = new WritableNativeMap();
+
             response.putBoolean("isHeadless", true);
             response.putString("uuid", uuid);
+            response.putString("data", data);
 
             this.headlessExtras = response;
 
