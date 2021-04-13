@@ -36,7 +36,8 @@ public class UnlockScreenActivity extends AppCompatActivity implements UnlockScr
     private ImageView ivAvatar;
     private String uuid = "";
     static boolean active = false;
-    private ReadableMap data;
+    private String channelId = "";
+    private String handle = "";
     private static Vibrator v = (Vibrator) IncomingCallModule.reactContext.getSystemService(Context.VIBRATOR_SERVICE);
     private long[] pattern = {0, 1000, 800};
     private static MediaPlayer player = MediaPlayer.create(IncomingCallModule.reactContext, Settings.System.DEFAULT_RINGTONE_URI);
@@ -71,7 +72,6 @@ public class UnlockScreenActivity extends AppCompatActivity implements UnlockScr
             if (bundle.containsKey("uuid")) {
                 uuid = bundle.getString("uuid");
             }
-            data = Arguments.fromBundle(bundle);
             if (bundle.containsKey("name")) {
                 String name = bundle.getString("name");
                 tvName.setText(name);
@@ -79,6 +79,13 @@ public class UnlockScreenActivity extends AppCompatActivity implements UnlockScr
             if (bundle.containsKey("info")) {
                 String info = bundle.getString("info");
                 tvInfo.setText(info);
+            }
+            if (bundle.containsKey("channelId")) {
+                channelId = bundle.getString("channelId");
+
+            }
+            if (bundle.containsKey("handle")) {
+                 handle = bundle.getString("handle");
             }
             if (bundle.containsKey("avatar")) {
                 String avatar = bundle.getString("avatar");
@@ -138,7 +145,8 @@ public class UnlockScreenActivity extends AppCompatActivity implements UnlockScr
         WritableMap params = Arguments.createMap();
         params.putBoolean("accept", true);
         params.putString("uuid", uuid);
-        params.putString("data", data);
+        params.putString("channelId", channelId);
+        params.putString("handle", handle);
         if (!IncomingCallModule.reactContext.hasCurrentActivity()) {
             params.putBoolean("isHeadless", true);
         }

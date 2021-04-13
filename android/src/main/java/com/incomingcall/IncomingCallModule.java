@@ -40,7 +40,7 @@ public class IncomingCallModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void display(String uuid, String name, String avatar, String info, int timeout, @Nullable ReadableMap data) {
+    public void display(String uuid, String name, String avatar, String info, int timeout, String channelId, String handle) {
         if (UnlockScreenActivity.active) {
             return;
         }
@@ -50,10 +50,9 @@ public class IncomingCallModule extends ReactContextBaseJavaModule {
             bundle.putString("name", name);
             bundle.putString("avatar", avatar);
             bundle.putString("info", info);
+            bundle.putString("channelId", channelId);
+            bundle.putString("handle", handle);
 
-            if (data != null) {
-                bundle = Arguments.toBundle(data);
-            }
             Intent i = new Intent(reactContext, UnlockScreenActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             i.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED +
@@ -125,6 +124,8 @@ public class IncomingCallModule extends ReactContextBaseJavaModule {
             response.putBoolean("isHeadless", true);
             response.putString("uuid", uuid);
             response.putString("data", data);
+            response.putString("channelId", channelId);
+            response.putString("handle", handle);
 
             this.headlessExtras = response;
 
