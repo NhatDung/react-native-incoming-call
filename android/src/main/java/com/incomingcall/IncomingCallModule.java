@@ -123,7 +123,6 @@ public class IncomingCallModule extends ReactContextBaseJavaModule {
 
             response.putBoolean("isHeadless", true);
             response.putString("uuid", uuid);
-            response.putString("data", data);
             response.putString("channelId", channelId);
             response.putString("handle", handle);
 
