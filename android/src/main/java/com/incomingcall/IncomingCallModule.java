@@ -105,7 +105,7 @@ public class IncomingCallModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void openAppFromHeadlessMode(String uuid, @Nullable ReadableMap data) {
+    public void openAppFromHeadlessMode(String uuid, String channelId, String handle) {
         Context context = getAppContext();
         String packageName = context.getApplicationContext().getPackageName();
         Intent focusIntent = context.getPackageManager().getLaunchIntentForPackage(packageName).cloneFilter();
